@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPIDY | Web-Slinging Streetwear</title>
+    <!-- Google Fonts for Bold, Modern Urban Aesthetic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- DESIGN SYSTEM & CSS VARIABLES --- */
+        :root {
+            --bg-primary: #0a0a0c;
+            --bg-secondary: #121216;
+            --spider-red: #ff2a4b;
+            --spider-blue: #0055ff;
+            --text-light: #ffffff;
+            --text-gray: #a0a0aa;
+            --font-display: 'Montserrat', sans-serif;
+            --font-body: 'Space Grotesk', sans-serif;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* --- GLOBAL RESETS --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-light);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+        }
+
+        /* --- BACKGROUND DECORATION --- */
+        .web-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 42, 75, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(0, 85, 255, 0.05) 0%, transparent 40%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* --- NAVIGATION --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem 10%;
+            background: rgba(10, 10, 12, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: 2rem;
+            letter-spacing: -1px;
+            color: var(--text-light);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .logo span {
+            color: var(--spider-red);
+            text-shadow: 0 0 15px rgba(255, 42, 75, 0.6);
+        }
+
+        nav a {
+            color: var(--text-gray);
+            text-decoration: none;
+            margin-left: 2rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--spider-red);
+        }
+
+        .cart-icon-container {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background: var(--spider-red);
+            color: white;
+            font-size: 0.75rem;
+            padding: 2px 6px;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 10%;
+            position: relative;
+            margin-top: 40px;
+        }
+
+        .hero-content {
+            max-width: 600px;
+            z-index: 2;
+        }
+
+        .hero-tagline {
+            color: var(--spider-red);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: 4.5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(to right, var(--spider-red), #ff7e93);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: var(--spider-red);
+            color: white;
+            text-decoration: none;
+            padding: 1rem 2.5rem;
+            font-family: var(--font-display);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+            border-radius: 4px;
+            box-shadow: 0 10px 20px rgba(255, 42, 75, 0.3);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(255, 42, 75, 0.5);
+            background: #ff415f;
+        }
+
+        /* --- HERO VISUAL WRAPPER --- */
+        .hero-visual {
+            position: absolute;
+            right: 10%;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(255, 42, 75, 0.15) 0%, transparent 70%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .hero-art-placeholder {
+            width: 80%;
+            height: 80%;
+            border: 2px dashed rgba(255, 42, 75, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-family: var(--font-display);
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.3);
+            animation: spin 30s linear infinite;
+        }
+
+        @keyframes spin { 100% { transform: rotate(30deg); } }
+
+        /* --- STORE FILTER BUTTONS --- */
+        .shop-section {
+            padding: 5rem 10%;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 3rem;
+            border-left: 5px solid var(--spider-red);
+            padding-left: 1rem;
+        }
+
+        .filter-container {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .filter-btn {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            padding: 0.75rem 2rem;
+            border-radius: 4px;
+            font-family: var(--font-body);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--spider-red);
+            border-color: var(--spider-red);
+        }
+
+        /* --- PRODUCTS GRID --- */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .product-card {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255, 42, 75, 0.4);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .product-img-box {
+            width: 100%;
+            height: 320px;
+            background: #1a1a22;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Mock Graphic Elements inside apparel */
+        .apparel-mock {
+            width: 140px;
+            height: 160px;
+            background: #2a2a35;
+            border-radius: 8px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.4);
+        }
+
+        .apparel-mock::before {
+            content: "🕸️";
+            font-size: 2.5rem;
+            opacity: 0.7;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: var(--spider-blue);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .product-badge.bundle {
+            background: var(--spider-red);
+        }
+
+        .product-info {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .product-title {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-price {
+            color: var(--spider-red);
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .add-to-cart {
+            margin-top: auto;
+            width: 100%;
+            background: transparent;
+            border: 1px solid var(--spider-red);
+            color: white;
+            padding: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .add-to-cart:hover {
+            background: var(--spider-red);
+        }
+
+        /* --- SIDE DRAWER CART --- */
+        .cart-drawer {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: var(--bg-secondary);
+            box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+            z-index: 1000;
+            transition: 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            padding: 2rem;
+            border-left: 1px solid rgba(255, 42, 75, 0.2);
+        }
+
+        .cart-drawer.open {
+            right: 0;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 1rem;
+        }
+
+        .cart-header h3 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .cart-items-container {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            background: rgba(255,255,255,0.02);
+            padding: 0.75rem;
+            border-radius: 4px;
+        }
+
+        .cart-item-details h4 {
+            font-size: 0.95rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .cart-item-details span {
+            color: var(--spider-red);
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .remove-item {
+            background: none;
+            border: none;
+            color: #ff4b4b;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .cart-footer {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 1.5rem;
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: #060608;
+            padding: 3rem 10%;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        /* --- RESPONSIVENESS --- */
+        @media(max-width: 968px) {
+            .hero { flex-direction: column; text-align: center; justify-content: center; }
+            .hero-content { max-width: 100%; }
+            .hero h1 { font-size: 3rem; }
+            .hero-visual { display: none; }
+            .cart-drawer { width: 100%; right: -100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="web-bg"></div>
+
+    <!-- NAVIGATION HEADER -->
+    <header>
+        <a href="#" class="logo"><span>SPIDY</span>.</a>
+        <nav>
+            <a href="#hero" class="active">Home</a>
+            <a href="#shop">Shop</a>
+            <div class="cart-icon-container" onclick="toggleCart()" style="display: inline-block; margin-left: 2rem;">
+                <span>🛒 Cart</span>
+                <div class="cart-count" id="cartCount">0</div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- HERO HOME SECTION -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <p class="hero-tagline">Drop 01 // Beyond the Verse</p>
+            <h1>Thwip Your <br><span>Streetwear</span></h1>
+            <p>Premium weight graphic drops, oversized cuts, and technical bundle loadouts engineered for arachnid aesthetics. Don't slip on the web.</p>
+            <button class="cta-btn" onclick="document.getElementById('shop').scrollIntoView()">Explore Collection</button>
+        </div>
+        <div class="hero-visual">
+            <div class="hero-art-placeholder">
+                SPIDY DESIGN LOGO AREA
+            </div>
+        </div>
+    </section>
+
+    <!-- SHOPPING MAIN SECTION -->
+    <section class="shop-section" id="shop">
+        <h2 class="section-title">The Catalog</h2>
+        
+        <!-- Interactive Category Switcher -->
+        <div class="filter-container">
+            <button class="filter-btn active" onclick="filterCatalog('all', this)">All Drops</button>
+            <button class="filter-btn" onclick="filterCatalog('bundle', this)">Bundles</button>
+            <button class="filter-btn" onclick="filterCatalog('tshirt', this)">T-Shirts</button>
+        </div>
+
+        <!-- Dynamic Product Listing -->
+        <div class="products-grid" id="productGrid">
+            <!-- Rendered by JS JavaScript -->
+        </div>
+    </section>
+
+    <!-- SLIDE-OUT SHOPPING CART DRAWER -->
+    <div class="cart-drawer" id="cartDrawer">
+        <div class="cart-header">
+            <h3>Your Loadout</h3>
+            <button class="close-cart" onclick="toggleCart()">✕</button>
+        </div>
+        <div class="cart-items-container" id="cartItems">
+            <!-- Dynamic items go here -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total Value:</span>
+                <span id="cartTotal">$0.00</span>
+            </div>
+            <button class="cta-btn" style="width: 100%; text-align: center;" onclick="alert('Checkout integration is coming next!')">Secure Checkout</button>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 SPIDY Apparel Studio. Deeply inspired by web-slingers. Built using HTML, CSS & Vanilla JS.</p>
+    </footer>
+
+    <!-- INTERACTIVE APP LOGIC -->
+    <script>
+        // Data Store containing your inventory items
+        const catalogItems = [
+            { id: 1, type: 'bundle', title: 'Miles Brooklyn Tech Bundle', price: 145.00, tag: 'Limited Bundle' },
+            { id: 2, type: 'tshirt', title: 'Classic Red Spider Graphic Tee', price: 45.00, tag: 'Heavyweight' },
+            { id: 3, type: 'bundle', title: 'Symbiote Stealth Cargo Combo', price: 160.00, tag: 'High Demand' },
+            { id: 4, type: 'tshirt', title: 'Cyber-Web Neon Acid Tee', price: 48.00, tag: 'Oversized' },
+            { id: 5, type: 'bundle', title: 'Multiverse Glitch Graphic Pack', price: 120.00, tag: 'Special Edition' },
+            { id: 6, type: 'tshirt', title: 'Spectacular Retro Comic Print', price: 40.00, tag: 'Vintage Wash' }
+        ];
+
+        let cart = [];
+
+        // Dynamic Product Generation Injection
+        function displayProducts(items) {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = '';
+            
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <div class="product-img-box">
+                        <span class="product-badge ${item.type}">${item.tag}</span>
+                        <div class="apparel-mock"></div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">${item.title}</h3>
+                        <div class="product-price">$${item.price.toFixed(2)}</div>
+                        <button class="add-to-cart" onclick="addToCart(${item.id})">Equip Item</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Functional Filter System
+        function filterCatalog(category, buttonEl) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            buttonEl.classList.add('active');
+
+            if(category === 'all') {
+                displayProducts(catalogItems);
+            } else {
+                const filtered = catalogItems.filter(item => item.type === category);
+                displayProducts(filtered);
+            }
+        }
+
+        // Drawer UI Toggle Control
+        function toggleCart() {
+            document.getElementById('cartDrawer').classList.toggle('open');
+        }
+
+        // Core App Processing Functions
+        function addToCart(id) {
+            const item = catalogItems.find(p => p.id === id);
+            cart.push(item);
+            updateCartUI();
+            
+            // Pop open the cart drawer to offer clean immediate feedback
+            document.getElementById('cartDrawer').classList.add('open');
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            // Count Update
+            document.getElementById('cartCount').innerText = cart.length;
+
+            // Render Items list
+            const container = document.getElementById('cartItems');
+            container.innerHTML = '';
+            
+            let total = 0;
+            cart.forEach((item, index) => {
+                total += item.price;
+                const element = document.createElement('div');
+                element.className = 'cart-item';
+                element.innerHTML = `
+                    <div class="cart-item-details">
+                        <h4>${item.title}</h4>
+                        <span>$${item.price.toFixed(2)}</span>
+                    </div>
+                    <button class="remove-item" onclick="removeFromCart(${index})">Remove</button>
+                `;
+                container.appendChild(element);
+            });
+
+            // Update Total Value Display
+            document.getElementById('cartTotal').innerText = `$${total.toFixed(2)}`;
+        }
+
+        // Run on Initialize Startup Hook
+        displayProducts(catalogItems);
+    </script>
+</body>
+</html>
